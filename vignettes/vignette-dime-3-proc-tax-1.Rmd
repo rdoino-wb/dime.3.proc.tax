@@ -1,0 +1,19 @@
+---
+title: "vignette-dime-3-proc-tax-1"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette-dime-3-proc-tax-1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(dime.3.proc.tax)
+```
