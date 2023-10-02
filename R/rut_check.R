@@ -1,39 +1,73 @@
-require(data.table)
-require(stringr)
+#' Compute the Check Digit for a Chilean RUT
+#'
+#' This function calculates the check digit for a given RUT (Rol Único Tributario),
+#' which is a Chilean tax identification number.
+#'
+#' @param rut The RUT number as a numeric or character string. Dots and characters after '-' in the string will be removed.
+#'
+#' @return Returns the calculated check digit as a character string.
+#'
+#' @examples
+#' rut_number <- "76086428"
+#' compute_check_digit(rut_number)
+#'
+#' rut_number_with_dots <- "76.086.428"
+#' compute_check_digit(rut_number_with_dots)
+#'
+#' rut_with_hyphen <- "76.086.428-K"
+#' compute_check_digit(rut_with_hyphen)
+#'
+#' @export
+#'
+#'
+compute_check_digit <- function(rut) {
+  # Make sure the input is a numeric or character type
+  if (!is.numeric(rut) && !is.character(rut)) {
+    stop("The RUT should be numeric or character.")
+  }
 
-rut_check <- function(data, variable, without_dots = FALSE) {
+  # Convert the RUT to a string if it's numeric
+  if (is.numeric(rut)) {
+    rut <- as.character(rut)
+  }
 
-  variable <- substitute(variable)  # Replacing enquo
-  data <- as.data.table(data)  # Ensure the data is a data.table
+  # Remove characters after '-'
+  rut <- sub("-.*$", "", rut)
 
-  if(without_dots == TRUE) {
-    data[, (variable) := str_remove_all(substr(get(variable), 0, nchar(get(variable)) - 1), pattern = "\\s")]
+  # Remove any dots
+  rut <- gsub("\\.", "", rut)
+
+  # Reverse the RUT string for calculation
+  rut_reversed <- rev(unlist(strsplit(rut, "")))
+
+  # Initialize sum and multiplier
+  sum = 0
+  multiplier = 2
+
+  # Calculate the sum for check digit
+  for (digit in rut_reversed) {
+    sum <- sum + as.numeric(digit) * multiplier
+    multiplier <- multiplier + 1
+    if (multiplier == 8) {
+      multiplier = 2
+    }
+  }
+
+  # Calculate check digit
+  check_digit_value <- 11 - (sum %% 11)
+
+  # Transform the check digit value to appropriate format
+  if (check_digit_value == 11) {
+    check_digit <- "0"
+  } else if (check_digit_value == 10) {
+    check_digit <- "K"
   } else {
-    one_two_dgt <- "[0-9]{1,2}"
-    three_dgt   <- "[0-9]{3}"
-    pattern_rut <- paste0(one_two_dgt, "\\.", three_dgt, "\\.", three_dgt, "\\-")
-
-    data[, (variable) := substr(get(variable), 0, nchar(get(variable)) - 1)]
-    data[, (variable) := str_remove_all(get(variable), pattern = "\\s")]
-    data[, (variable) := ifelse(stringr::str_detect(get(variable), pattern = pattern_rut), get(variable), NA)]
+    check_digit <- as.character(check_digit_value)
   }
 
-  # Compute check digit
-  data[, check_digit := gsub("[^0-9]", "", get(variable))]
-  digits <- lapply(1:9, function(x) as.numeric(substr(data$check_digit, x, x)))
-  setnames(data, "check_digit", "sum")
+  # we paste together the id rut
+  id_rut_firm <- paste0(rut, "-", check_digit)
 
-  for (i in 1:9) {
-    set(data, j = paste0("digit_", i), value = digits[[i]])
-  }
+  return(id_rut_firm)
 
-  weights <- c(2, 3, 4, 5, 6, 7, 2, 3, 4)
-  data[, sum := rowSums(mapply(`*`, .SD, weights), na.rm = TRUE), .SDcols = paste0("digit_", 1:9)]
-  data[, check_digit := 11 - (sum - (11 * (sum %/% 11)))]
-  data[, check_digit := ifelse(check_digit == 11, 0, ifelse(check_digit == 10, "K", check_digit))]
-  data[, (variable) := paste0(get(variable), check_digit)]
-
-  data[, c("sum", paste0("digit_", 1:9)) := NULL]
-
-  return(data)
 }
