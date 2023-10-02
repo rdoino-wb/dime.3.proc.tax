@@ -20,7 +20,7 @@
 #' @export
 #'
 #'
-compute_check_digit <- function(rut) {
+rut_check <- function(rut) {
   # Make sure the input is a numeric or character type
   if (!is.numeric(rut) && !is.character(rut)) {
     stop("The RUT should be numeric or character.")
