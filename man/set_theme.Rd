@@ -29,10 +29,10 @@ set_theme(
   plot_caption_position = "plot",
   axis_line_x = element_blank(),
   axis_line_y = element_blank(),
-  axis_text_x = element_markdown(size = x_text_size, color = y_text_color, family =
-    "LM Roman 10"),
-  axis_text_y = element_markdown(size = y_text_size, color = y_text_color, family =
-    "LM Roman 10"),
+  axis_text_x = ggtext::element_markdown(size = x_text_size, color = y_text_color, family
+    = "LM Roman 10"),
+  axis_text_y = ggtext::element_markdown(size = y_text_size, color = y_text_color, family
+    = "LM Roman 10"),
   legend_box_background = element_rect(fill = "white", color = "black")
 )
 }
