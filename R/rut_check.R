@@ -30,7 +30,7 @@ rut_check <- function(data, variable, without_dots = FALSE) {
   weights <- c(2, 3, 4, 5, 6, 7, 2, 3, 4)
   data[, sum := rowSums(mapply(`*`, .SD, weights), na.rm = TRUE), .SDcols = paste0("digit_", 1:9)]
   data[, check_digit := 11 - (sum - (11 * (sum %/% 11)))]
-  data[, check_digit := data.table::fifelse(check_digit == 11, 0, data.table::fifelse(check_digit == 10, "K", check_digit))]
+  data[, check_digit := ifelse(check_digit == 11, 0, ifelse(check_digit == 10, "K", check_digit))]
   data[, (variable) := paste0(get(variable), check_digit)]
 
   data[, c("sum", paste0("digit_", 1:9)) := NULL]
