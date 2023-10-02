@@ -37,10 +37,6 @@ rut_check <- function(rut) {
   # Remove any dots
   rut <- gsub("\\.", "", rut)
 
-  if (nchar(rut) != 8) {
-    return(rut)
-  }
-
   # Reverse the RUT string for calculation
   rut_reversed <- rev(unlist(strsplit(rut, "")))
 
