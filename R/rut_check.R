@@ -9,13 +9,13 @@
 #'
 #' @examples
 #' rut_number <- "76086428"
-#' compute_check_digit(rut_number)
+#' rut_check(rut_number)
 #'
 #' rut_number_with_dots <- "76.086.428"
-#' compute_check_digit(rut_number_with_dots)
+#' rut_check(rut_number_with_dots)
 #'
 #' rut_with_hyphen <- "76.086.428-K"
-#' compute_check_digit(rut_with_hyphen)
+#' rut_check(rut_with_hyphen)
 #'
 #' @export
 #'
