@@ -21,53 +21,63 @@
 #'
 #'
 rut_check <- function(rut) {
-  # Make sure the input is a numeric or character type
-  if (!is.numeric(rut) && !is.character(rut)) {
-    stop("The RUT should be numeric or character.")
-  }
 
-  # Convert the RUT to a string if it's numeric
-  if (is.numeric(rut)) {
-    rut <- as.character(rut)
-  }
+  # Initialize an empty vector to store the results
+  id_rut_firm <- character(length = length(rut))
 
-  # Remove characters after '-'
-  rut <- sub("-.*$", "", rut)
+  # Loop through each element of the input vector
+  for (i in seq_along(rut)) {
 
-  # Remove any dots
-  rut <- gsub("\\.", "", rut)
+    elem <- rut[i]
 
-  # Reverse the RUT string for calculation
-  rut_reversed <- rev(unlist(strsplit(rut, "")))
-
-  # Initialize sum and multiplier
-  sum = 0
-  multiplier = 2
-
-  # Calculate the sum for check digit
-  for (digit in rut_reversed) {
-    sum <- sum + as.numeric(digit) * multiplier
-    multiplier <- multiplier + 1
-    if (multiplier == 8) {
-      multiplier = 2
+    # Check the type of the element
+    if (!is.numeric(elem) && !is.character(elem)) {
+      id_rut_firm[i] <- NA
+      next
     }
+
+    # Convert to character if numeric
+    if (is.numeric(elem)) {
+      elem <- as.character(elem)
+    }
+
+    # Remove characters after "-" and dots
+    elem <- sub("-.*$", "", elem)
+    elem <- gsub("\\.", "", elem)
+
+    # If element has any alphabetic character or isn't 8 characters long, skip it
+    if (grepl("[a-zA-Z]", elem)) {
+      id_rut_firm[i] <- NA
+      next
+    }
+
+    # Calculate the check digit
+    elem_reversed <- rev(unlist(strsplit(elem, "")))
+    sum = 0
+    multiplier = 2
+    for (digit in elem_reversed) {
+      sum <- sum + as.numeric(digit) * multiplier
+      multiplier <- multiplier + 1
+      if (multiplier == 8) {
+        multiplier = 2
+      }
+    }
+
+    check_digit_value <- 11 - (sum %% 11)
+
+    # Determine the check digit
+    if (check_digit_value == 11) {
+      check_digit <- "0"
+    } else if (check_digit_value == 10) {
+      check_digit <- "K"
+    } else {
+      check_digit <- as.character(check_digit_value)
+    }
+
+    # Construct the full RUT with the check digit
+    id_rut_firm[i] <- paste0(elem, "-", check_digit)
+
   }
-
-  # Calculate check digit
-  check_digit_value <- 11 - (sum %% 11)
-
-  # Transform the check digit value to appropriate format
-  if (check_digit_value == 11) {
-    check_digit <- "0"
-  } else if (check_digit_value == 10) {
-    check_digit <- "K"
-  } else {
-    check_digit <- as.character(check_digit_value)
-  }
-
-  # we paste together the id rut
-  id_rut_firm <- paste0(rut, "-", check_digit)
 
   return(id_rut_firm)
-
 }
