@@ -65,6 +65,12 @@ rut_check <- function(rut) {
 
     check_digit_value <- 11 - (sum %% 11)
 
+    # Just a check in case of weird missnig values
+    if (is.na(check_digit_value)) {
+      id_rut_firm[i] <- NA
+      next
+    }
+
     # Determine the check digit
     if (check_digit_value == 11) {
       check_digit <- "0"
