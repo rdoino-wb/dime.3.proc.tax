@@ -21,76 +21,40 @@
 #'               notes = "Standard errors in parentheses.",
 #'               rows = NULL, coef_omit_list = NULL)
 #' }
-model_summary <- function(reg, output, notes, coef_map) {
+model_summary <- function (reg, output, notes, coef_map)
+{
+
+  gm <- tibble::tribble(
+    ~raw, ~clean, ~fmt,
+    "nobs", "N", 0,
+    "Mean of DV", "Mean of Dep Var", 2,
+    "r.squared", "R^{2}", 2,
+    "adj.r.squared", "Adj R^{2}", 2
+  )
+
+  gm$fmt <- list(
+    function(x) format_bigmark(x, 0),
+    function(x) format_bigmark(x, 2),
+    function(x) format_bigmark(x, 2),
+    function(x) format_bigmark(x, 2)
+  )
 
   if (output == "gt") {
-
-    # we save the output in latex
-    gm <- tibble::tribble(
-      ~raw,        ~clean,          ~fmt,
-      "nobs",      "N",             0,
-      "Mean of DV","Mean of Dep Var", 2,
-      "r.squared", "R^{2}", 2,
-      "adj.r.squared", "Adj R^{2}", 2
-    )
-
-    format_bigmark <- function(x, digits = 3) {
-      format(round(x, digits), big.mark = ",", scientific = FALSE)
-    }
-
-    gm$fmt <- list(
-      function(x) format_bigmark(x, 0),
-      function(x) format_bigmark(x, 2),
-      function(x) format_bigmark(x, 2),
-      function(x) format_bigmark(x, 2)
-    )
-
     modelsummary::modelsummary(
-      reg,
-      coef_map = coef_map,
-      fmt = NULL,
-      estimate = "{format_bigmark(estimate)}{stars}",
+      reg, coef_map = coef_map,
+      fmt = NULL, estimate = "{format_bigmark(estimate)}{stars}",
       statistic = "({(format_bigmark(std.error))})",
-      output = "gt",
-      stars = TRUE,
-      gof_map = gm,
-      escape = FALSE,
-      notes = notes)
-
+      output = "gt", stars = TRUE, gof_map = gm, escape = FALSE,
+      notes = notes
+    )
   } else {
-
-    # we save the output in latex
-    gm <- tibble::tribble(
-      ~raw,        ~clean,          ~fmt,
-      "nobs",      "N",             0,
-      "Mean of DV","Mean of Dep Var", 2,
-      "r.squared", "R^{2}", 2,
-      "adj.r.squared", "Adj R^{2}", 2
-    )
-
-    format_bigmark <- function(x, digits = 3) {
-      format(round(x, digits), big.mark = ",", scientific = FALSE)
-    }
-
-    gm$fmt <- list(
-      function(x) format_bigmark(x, 0),
-      function(x) format_bigmark(x, 2),
-      function(x) format_bigmark(x, 2),
-      function(x) format_bigmark(x, 2)
-    )
-
     modelsummary::modelsummary(
-      reg,
-      coef_map = coef_map,
-      fmt = NULL,
-      estimate = "{format_bigmark(estimate)}{stars}",
+      reg, coef_map = coef_map,
+      fmt = NULL, estimate = "{format_bigmark(estimate)}{stars}",
       statistic = "({(format_bigmark(std.error))})",
       output = file.path(table_output, output),
-      stars = TRUE,
-      gof_map = gm,
-      escape = FALSE,
-      notes = notes)
-
+      stars = TRUE, gof_map = gm, escape = FALSE, notes = notes
+    )
   }
-
 }
+
