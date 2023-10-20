@@ -4,20 +4,16 @@
 \alias{model_summary}
 \title{Model Summary in LaTeX Format}
 \usage{
-model_summary(reg, output, list_names, notes, rows, coef_omit_list)
+model_summary(reg, output, notes, coef_map)
 }
 \arguments{
 \item{reg}{Regression object for which summary is generated.}
 
 \item{output}{Output format, although the function currently only supports LaTeX.}
 
-\item{list_names}{List of coefficient names to rename in the summary.}
-
 \item{notes}{Notes to include at the bottom of the table.}
 
-\item{rows}{Additional rows to include in the summary table.}
-
-\item{coef_omit_list}{List of coefficients to omit from the summary.}
+\item{coef_map}{List of coefficients to omit from the summary.}
 }
 \value{
 A LaTeX-formatted summary of the regression model.
