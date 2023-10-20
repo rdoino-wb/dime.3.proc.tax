@@ -5,10 +5,8 @@
 #'
 #' @param reg Regression object for which summary is generated.
 #' @param output Output format, although the function currently only supports LaTeX.
-#' @param list_names List of coefficient names to rename in the summary.
 #' @param notes Notes to include at the bottom of the table.
-#' @param rows Additional rows to include in the summary table.
-#' @param coef_omit_list List of coefficients to omit from the summary.
+#' @param coef_map List of coefficients to omit from the summary.
 #'
 #' @return A LaTeX-formatted summary of the regression model.
 #' @export
@@ -23,30 +21,76 @@
 #'               notes = "Standard errors in parentheses.",
 #'               rows = NULL, coef_omit_list = NULL)
 #' }
-model_summary <- function(reg, output, list_names, notes, rows, coef_omit_list) {
+model_summary <- function(reg, output, notes, coef_map) {
 
-  # we save the output in latex
-  gm <- tibble::tribble(
-    ~raw,        ~clean,          ~fmt,
-    "nobs",      "N",             0,
-    "Mean of DV","Mean of Dep Var", 2,
-    "r.squared", "R^{2}", 2,
-    "adj.r.squared", "Adj R^{2}", 2
-  )
+  if (output == "gt") {
 
-  f <- function(x) formatC(x, digits = 3, big.mark = ",", format = "f")
+    # we save the output in latex
+    gm <- tibble::tribble(
+      ~raw,        ~clean,          ~fmt,
+      "nobs",      "N",             0,
+      "Mean of DV","Mean of Dep Var", 2,
+      "r.squared", "R^{2}", 2,
+      "adj.r.squared", "Adj R^{2}", 2
+    )
 
-  model = modelsummary::modelsummary(
-    reg,
-    coef_rename = list_names,
-    omit = coef_omit_list,
-    fmt = f,
-    estimate = "{round(estimate, 3)}{stars}",
-    statistic = "({(round(std.error, 3))})",
-    stars = TRUE,
-    gof_map = gm,
-    add_rows = rows,
-    escape = FALSE,
-    notes = notes)
+    format_bigmark <- function(x, digits = 3) {
+      format(round(x, digits), big.mark = ",", scientific = FALSE)
+    }
+
+    gm$fmt <- list(
+      function(x) format_bigmark(x, 0),
+      function(x) format_bigmark(x, 2),
+      function(x) format_bigmark(x, 2),
+      function(x) format_bigmark(x, 2)
+    )
+
+    modelsummary::modelsummary(
+      reg,
+      coef_map = coef_map,
+      fmt = NULL,
+      estimate = "{format_bigmark(estimate)}{stars}",
+      statistic = "({(format_bigmark(std.error))})",
+      output = "gt",
+      stars = TRUE,
+      gof_map = gm,
+      escape = FALSE,
+      notes = notes)
+
+  } else {
+
+    # we save the output in latex
+    gm <- tibble::tribble(
+      ~raw,        ~clean,          ~fmt,
+      "nobs",      "N",             0,
+      "Mean of DV","Mean of Dep Var", 2,
+      "r.squared", "R^{2}", 2,
+      "adj.r.squared", "Adj R^{2}", 2
+    )
+
+    format_bigmark <- function(x, digits = 3) {
+      format(round(x, digits), big.mark = ",", scientific = FALSE)
+    }
+
+    gm$fmt <- list(
+      function(x) format_bigmark(x, 0),
+      function(x) format_bigmark(x, 2),
+      function(x) format_bigmark(x, 2),
+      function(x) format_bigmark(x, 2)
+    )
+
+    modelsummary::modelsummary(
+      reg,
+      coef_map = coef_map,
+      fmt = NULL,
+      estimate = "{format_bigmark(estimate)}{stars}",
+      statistic = "({(format_bigmark(std.error))})",
+      output = file.path(table_output, output),
+      stars = TRUE,
+      gof_map = gm,
+      escape = FALSE,
+      notes = notes)
+
+  }
 
 }
