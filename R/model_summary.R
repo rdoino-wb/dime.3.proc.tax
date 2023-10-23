@@ -13,6 +13,7 @@
 #'
 #' @importFrom tibble tribble
 #' @importFrom modelsummary modelsummary
+#' @importFrom format_bigmark dime.3.proc.tax
 #'
 #' @examples
 #' \dontrun{
@@ -33,25 +34,25 @@ model_summary <- function (reg, output, notes, coef_map)
   )
 
   gm$fmt <- list(
-    function(x) format_bigmark(x, 0),
-    function(x) format_bigmark(x, 2),
-    function(x) format_bigmark(x, 2),
-    function(x) format_bigmark(x, 2)
+    function(x) dime.3.proc.tax::format_bigmark(x, 0),
+    function(x) dime.3.proc.tax::format_bigmark(x, 2),
+    function(x) dime.3.proc.tax::format_bigmark(x, 2),
+    function(x) dime.3.proc.tax::format_bigmark(x, 2)
   )
 
   if (output == "gt") {
     modelsummary::modelsummary(
       reg, coef_map = coef_map,
-      fmt = NULL, estimate = "{format_bigmark(estimate)}{stars}",
-      statistic = "({(format_bigmark(std.error))})",
+      fmt = NULL, estimate = "{dime.3.proc.tax::format_bigmark(estimate)}{stars}",
+      statistic = "({(dime.3.proc.tax::format_bigmark(std.error))})",
       output = "gt", stars = TRUE, gof_map = gm, escape = FALSE,
       notes = notes
     )
   } else {
     modelsummary::modelsummary(
       reg, coef_map = coef_map,
-      fmt = NULL, estimate = "{format_bigmark(estimate)}{stars}",
-      statistic = "({(format_bigmark(std.error))})",
+      fmt = NULL, estimate = "{dime.3.proc.tax::format_bigmark(estimate)}{stars}",
+      statistic = "({(dime.3.proc.tax::format_bigmark(std.error))})",
       output = file.path(table_output, output),
       stars = TRUE, gof_map = gm, escape = FALSE, notes = notes
     )
