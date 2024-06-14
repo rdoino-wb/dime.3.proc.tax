@@ -19,7 +19,9 @@ Imports:
     stringi, 
     data.table,
     tidyverse,
-    dplyr
+    dplyr,
+    magick,
+    tidyverse
 Suggests: 
     knitr,
     rmarkdown,
