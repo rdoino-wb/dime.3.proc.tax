@@ -6,61 +6,6 @@
 \usage{
 theme_aeqj()
 }
-\arguments{
-\item{theme}{ggplot2 theme object, default is theme_classic().}
-
-\item{size}{Numeric, base size for texts, default is 16.}
-
-\item{title_hjust}{Numeric, horizontal justification for title, default is 0.5.}
-
-\item{y_title_size}{Numeric, size for y-axis title, default inherits from 'size'.}
-
-\item{x_title_size}{Numeric, size for x-axis title, default inherits from 'size'.}
-
-\item{y_title_margin}{Margin for y-axis title, default is NULL.}
-
-\item{x_title_margin}{Margin for x-axis title, default is NULL.}
-
-\item{y_text_size}{Numeric, size for y-axis text, default inherits from 'size'.}
-
-\item{x_text_size}{Numeric, size for x-axis text, default inherits from 'size'.}
-
-\item{y_text_color}{Character, color for y-axis text, default is "black".}
-
-\item{x_text_color}{Character, color for x-axis text, default is "black".}
-
-\item{y_title_color}{Character, color for y-axis title, default is "black".}
-
-\item{x_title_color}{Character, color for x-axis title, default is "black".}
-
-\item{legend_text_size}{Numeric, size for legend text, default inherits from 'size'.}
-
-\item{legend_position}{Character, position for legend, default is "none".}
-
-\item{legend_key_fill}{Fill color for legend key, default is NA.}
-
-\item{legend_key_color}{Color for legend key, default is NA.}
-
-\item{plot_title_position}{Position for plot title, default is NULL.}
-
-\item{plot_margin}{Margin for plot, default is margin(25, 25, 10, 25).}
-
-\item{axis_title_y_blank}{Logical, whether to blank y-axis title for full left-alignment, default is FALSE.}
-
-\item{aspect_ratio}{Numeric, aspect ratio for plot, default is NULL.}
-
-\item{plot_caption_position}{Position for plot caption, default is "plot".}
-
-\item{axis_line_x}{ggplot2 element for x-axis line, default is element_blank().}
-
-\item{axis_line_y}{ggplot2 element for y-axis line, default is element_blank().}
-
-\item{axis_text_x}{ggplot2 element for x-axis text, default is element_markdown().}
-
-\item{axis_text_y}{ggplot2 element for y-axis text, default is element_markdown().}
-
-\item{legend_box_background}{ggplot2 element for legend box background, default is element_rect().}
-}
 \value{
 Modified ggplot2 theme object.
 }
