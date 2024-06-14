@@ -7,6 +7,8 @@
 #' @param file_name This is the name of the file that we want to create
 #'
 #' @importFrom tinytex pdflatex
+#' @importFrom magick image_read_pdf
+#' @importFrom magick image_convert
 #'
 #' @export
 pdf_table <- function(table, file_name) {
@@ -16,7 +18,6 @@ pdf_table <- function(table, file_name) {
     stop("file_name needs to be in a .tex extension!")
 
   }
-
 
   if (file.exists(file_name)) {
 
