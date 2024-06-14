@@ -11,6 +11,12 @@
 #' @export
 pdf_table <- function(table, file_name) {
 
+  if (substr(file_name, nchar(file_name) - 3, nchar(file_name)) != ".tex") {
+
+    stop("file_name needs to be in a .tex extension!")
+
+  }
+
 
   if (file.exists(file_name)) {
 
@@ -68,6 +74,12 @@ pdf_table <- function(table, file_name) {
 
       cat((table)[j], "\n", file = file_name, append = "TRUE")
 
-    }
+  }
+
+  # Convert PDF to PNG
+  image <- image_read_pdf(file_name, density = 300) %>% image_convert(format = "png")
+
+  # Save the PNG image
+  image_write(image, paste0(substr("table.tex", 0, nchar("table.tex") - 3)), ".png")
 
 }
