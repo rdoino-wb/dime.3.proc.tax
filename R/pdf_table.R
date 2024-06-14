@@ -77,12 +77,12 @@ pdf_table <- function(table, file_name) {
 
   }
 
-  image <- image_read_pdf(paste0(substr(file_name, 0, nchar(file_name) -
+  image <- magick::image_read_pdf(paste0(substr(file_name, 0, nchar(file_name) -
                                           3), "pdf"), density = 300)
 
-  image <- image_convert(image, format = "png")
+  image <- magick::image_convert(image, format = "png")
 
-  image_write(image, paste0(substr(file_name, 0, nchar(file_name) -
+  magick::image_write(image, paste0(substr(file_name, 0, nchar(file_name) -
                                      3), "png"))
 
 }
