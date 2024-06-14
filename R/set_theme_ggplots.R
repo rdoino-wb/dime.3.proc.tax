@@ -81,5 +81,3 @@ theme_aeqj <- function() {
       )
 
   }
-
-}
